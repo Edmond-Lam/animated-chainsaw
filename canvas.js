@@ -16,8 +16,13 @@ var addDot = function(e) {
     if (this == e.target) {
 	var dot = makeDot(mousex, mousey);
     }
-    document.getElementById("svgImage").appendChild(dot);
+    svgImage.appendChild(dot);
 }
+
+var change = function(){
+    e.setAttribute("fill", "red");
+}
+			    
 
 var makeDot = function(x, y){
     var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -30,8 +35,14 @@ var makeDot = function(x, y){
     
     c.setAttribute("fill", "black");
 
+    c.setAttribute("id", "dot");
+
+    c.addEventListener("click", change);
+
     return c;
 }
+
+   
 
 
 
