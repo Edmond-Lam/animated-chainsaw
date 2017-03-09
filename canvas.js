@@ -19,8 +19,18 @@ var addDot = function(e) {
     svgImage.appendChild(dot);
 }
 
-var change = function(){
-    e.setAttribute("fill", "red");
+var change = function(e){
+    if (this.getAttribute("fill") == "black"){
+	this.setAttribute("fill", "red");
+	console.log("color");
+	e.stopPropagation();
+    }
+    else {
+	this.parentNode.removeChild(this);
+	e.stopPropagation();
+	var dot = makeDot(String(Math.floor(Math.random() * 500)), String(Math.floor(Math.random() * 500)));
+	svgImage.appendChild(dot);
+    }
 }
 			    
 
