@@ -99,10 +99,38 @@ var move = function(e){
 	    y = y + inc_y;
 	    dots[i].setAttribute("cx", x);
 	    dots[i].setAttribute("cy", y);
+	    if(x == 250){
+		divide(dots[i]);
+	    }
 	}
 	rid  = window.requestAnimationFrame(animate);
     }
     animate();
+}
+
+var divide = function(dot){
+    
+    var r = parseInt(dot.getAttribute("r")) / 2;
+    if(r >= 1){
+	var dot2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+	var x = parseInt(dot.getAttribute("cx"));
+	var y = parseInt(dot.getAttribute("cy"));
+	var inc_x = parseInt(dot.getAttribute("data-incrementX"));
+	var inc_y = parseInt(dot.getAttribute("data-incrementY"));
+	dot2.setAttribute("fill", "black");
+	dot2.setAttribute("class", "dot");
+	dot2.addEventListener("click", change);
+	dot.setAttribute("r", r);
+	dot2.setAttribute("r", r);
+	dot2.setAttribute("cx", x);
+	dot2.setAttribute("cy", y);
+	dot2.setAttribute("data-incrementX", inc_x * -1);
+	dot2.setAttribute("data-incrementY", inc_y * -1);
+	svgImage.appendChild(dot2);
+    }else{
+	dot.parentNode.removeChild(dot);
+    }
+    
 }
 
 var move_button = document.getElementById("move");
