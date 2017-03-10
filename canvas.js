@@ -28,7 +28,7 @@ var change = function(e){
     else {
 	this.parentNode.removeChild(this);
 	e.stopPropagation();
-	var dot = makeDot(String(Math.floor(Math.random() * 500)), String(Math.floor(Math.random() * 500)));
+	var dot = makeDot(Math.floor(Math.random() * 500), Math.floor(Math.random() * 500));
 	svgImage.appendChild(dot);
     }
 }
@@ -45,7 +45,11 @@ var makeDot = function(x, y){
     
     c.setAttribute("fill", "black");
 
-    c.setAttribute("id", "dot");
+    c.setAttribute("class", "dot");
+
+    c.setAttribute("data-incrementX", "1");
+
+    c.setAttribute("data-incrementY", "1");
 
     c.addEventListener("click", change);
 
@@ -57,6 +61,7 @@ var makeDot = function(x, y){
 
 
 var clear_screen = function(e){
+    window.cancelAnimationFrame(rid);
     while (svgImage.hasChildNodes()){
 	svgImage.removeChild(svgImage.lastChild);
     }
@@ -67,3 +72,46 @@ svgImage.addEventListener("click", addDot);
 
 
 clear_button.addEventListener("click", clear_screen);
+
+var rid;
+
+var move = function(e){
+    window.cancelAnimationFrame(rid);
+    var animate = function(){
+	var dots = document.getElementsByClassName("dot");
+	for(i = 0; i < dots.length; i++){
+	    var x = parseInt(dots[i].getAttribute("cx"));
+	    var y = parseInt(dots[i].getAttribute("cy"));
+	    var inc_x = parseInt(dots[i].getAttribute("data-incrementX"));
+	    var inc_y = parseInt(dots[i].getAttribute("data-incrementY"));
+			    
+	    if(x == 20 || x == 480){
+		inc_x = inc_x * -1;
+		dots[i].setAttribute("data-incrementX", String(inc_x));
+	    }
+	    if(y == 20 || y == 480){
+		inc_y = inc_y * -1;
+		dots[i].setAttribute("data-incrementY", String(inc_y));
+	    }
+	    
+	    
+	    x = x + inc_x;
+	    y = y + inc_y;
+	    dots[i].setAttribute("cx", x);
+	    dots[i].setAttribute("cy", y);
+	}
+	rid  = window.requestAnimationFrame(animate);
+    }
+    animate();
+}
+
+var move_button = document.getElementById("move");
+
+move_button.addEventListener("click", move);
+
+var stop = function(){
+    window.cancelAnimationFrame(rid);
+}
+
+var stop_button = document.getElementById("stop");
+stop_button.addEventListener("click", stop);
